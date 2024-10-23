@@ -33,7 +33,10 @@ apple_pos = [random.randrange(1, screen_width // apple_size) * apple_size,
 # Game settings
 direction = 'RIGHT'
 change_to = direction
-speed = 15
+speed = 10
+
+# Input buffer
+input_buffer = []
 
 # Game loop
 running = True
@@ -44,14 +47,21 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP and direction != 'DOWN':
-                change_to = 'UP'
-            elif event.key == pygame.K_DOWN and direction != 'UP':
-                change_to = 'DOWN'
-            elif event.key == pygame.K_LEFT and direction != 'RIGHT':
-                change_to = 'LEFT'
-            elif event.key == pygame.K_RIGHT and direction != 'LEFT':
-                change_to = 'RIGHT'
+            key = pygame.key.name(event.key)
+            if key in ['up', 'down', 'left', 'right']:
+                input_buffer.append(key)
+
+    # Process input buffer
+    if input_buffer:
+        key = input_buffer.pop(0)
+        if key == 'up' and direction != 'DOWN':
+            change_to = 'UP'
+        elif key == 'down' and direction != 'UP':
+            change_to = 'DOWN'
+        elif key == 'left' and direction != 'RIGHT':
+            change_to = 'LEFT'
+        elif key == 'right' and direction != 'LEFT':
+            change_to = 'RIGHT'
 
     # Update direction
     direction = change_to
