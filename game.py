@@ -13,6 +13,7 @@ screen_height = 600
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
+light_yellow = (255, 255, 153)
 
 # Set up the display
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -20,7 +21,7 @@ pygame.display.set_caption("Snake Game")
 
 # Snake settings
 snake_size = 20
-snake_color = white
+snake_color = light_yellow
 snake_pos = [screen_width // 2, screen_height // 2]
 snake_body = [snake_pos[:]]
 
@@ -94,8 +95,17 @@ while running:
 
     # Refresh game screen
     screen.fill(black)
-    for pos in snake_body:
-        pygame.draw.rect(screen, snake_color, pygame.Rect(pos[0], pos[1], snake_size, snake_size))
+    for index, pos in enumerate(snake_body):
+        if index == 0:  # Head of the snake
+            pygame.draw.circle(screen, snake_color, (pos[0] + snake_size // 2, pos[1] + snake_size // 2), snake_size // 2)
+            # Draw eyes
+            eye_radius = 3
+            eye_offset_x = 5
+            eye_offset_y = 5
+            pygame.draw.circle(screen, black, (pos[0] + snake_size // 2 - eye_offset_x, pos[1] + snake_size // 2 - eye_offset_y), eye_radius)
+            pygame.draw.circle(screen, black, (pos[0] + snake_size // 2 + eye_offset_x, pos[1] + snake_size // 2 - eye_offset_y), eye_radius)
+        else:
+            pygame.draw.rect(screen, snake_color, pygame.Rect(pos[0], pos[1], snake_size, snake_size))
     pygame.draw.rect(screen, apple_color, pygame.Rect(apple_pos[0], apple_pos[1], apple_size, apple_size))
 
     # Refresh rate
